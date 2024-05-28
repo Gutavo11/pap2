@@ -1,6 +1,7 @@
 package com.example.conceptsbreakdown6;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
@@ -12,15 +13,29 @@ import com.example.conceptsbreakdown6.reps.UserRepository;
 public class SessionManager {
 
     //deals with session management logic
+
+    private static SessionManager sessionManager;
     private MutableLiveData<Boolean> loginStatus = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> registerStatus = new MutableLiveData<>(false);
-    private UserRepository userRepository;
+    private MutableLiveData<UserModel> userData = new MutableLiveData<>();
+    private  UserRepository userRepository;
+    private Context context;
     private final SharedPreferences sharedPreferences;
     private final SharedPreferences.Editor editor;
-    public SessionManager(Context context, UserRepository userRepository) {
-        this.userRepository = userRepository;
+
+    private SessionManager(Context context) {
+        this.context = context.getApplicationContext();
+        //initialize code
+        userRepository = new UserRepository();
         sharedPreferences = context.getSharedPreferences("session_data", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+    }
+
+    public static synchronized SessionManager getInstance(Context context) {
+        if (sessionManager == null) {
+            sessionManager = new SessionManager(context);
+        }
+        return sessionManager;
     }
 
     public void login(String email, String password) {
@@ -31,6 +46,7 @@ public class SessionManager {
                 //navigate to main activity
                 saveUserData(user);
                 loginStatus.setValue(true);
+                userData.setValue(user);
             }
             @Override
             public void onError(String error) {
@@ -47,6 +63,7 @@ public class SessionManager {
                 //navigate back to auth activity
                 clearSession();
                 loginStatus.setValue(false);
+                navigateToAuthActivity();
             }
         });
     }
@@ -63,6 +80,28 @@ public class SessionManager {
             }
         });
     }
+
+    public void changeName(String name) {
+        userRepository.changeName(name, getToken(), new UserRepository.Updateprofile() {
+            @Override
+            public void onSuccess(UserModel user) {
+                userData.setValue(user);
+            }
+        });
+    }
+
+    public void changeEmail(String email) {
+        userRepository.changeEmail(email, getToken(), new UserRepository.Updateprofile() {
+            @Override
+            public void onSuccess(UserModel user) {
+                userData.setValue(user);
+            }
+        });
+    }
+
+    public String getToken() {
+        return sharedPreferences.getString("auth_token", "");
+    }
     public void saveUserData(UserModel user) {
         editor.putString("username", user.getName());
         editor.putString("email", user.getEmail());
@@ -76,11 +115,20 @@ public class SessionManager {
         editor.apply();
     }
 
+    private void navigateToAuthActivity() {
+        Intent intent = new Intent(context, AuthActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
     public LiveData<Boolean> getLoginStatus() {
         return loginStatus;
     }
     public LiveData<Boolean> getRegisterStatus() {
         return registerStatus;
+    }
+    public LiveData<UserModel> getUserData() {
+        return userData;
     }
 
 }

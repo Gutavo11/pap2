@@ -1,17 +1,14 @@
 package com.example.conceptsbreakdown6.api.model;
 
-public class NewsResponse {
-    private String id;
+public class StoryModel {
     private String title;
     private String content;
     private String image_path;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public StoryModel(String title, String content, String imagePath) {
+        this.title = title;
+        this.content = content;
+        this.image_path = imagePath;
     }
 
     public String getTitle() {

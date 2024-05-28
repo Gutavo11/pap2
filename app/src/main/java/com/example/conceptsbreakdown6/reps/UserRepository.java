@@ -2,6 +2,8 @@ package com.example.conceptsbreakdown6.reps;
 
 import com.example.conceptsbreakdown6.api.ApiClient;
 import com.example.conceptsbreakdown6.api.ApiService;
+import com.example.conceptsbreakdown6.api.model.ChangeEmailRequest;
+import com.example.conceptsbreakdown6.api.model.ChangeNameRequest;
 import com.example.conceptsbreakdown6.api.model.LoginRequest;
 import com.example.conceptsbreakdown6.api.model.RegisterRequest;
 import com.example.conceptsbreakdown6.api.model.RegisterResponse;
@@ -85,6 +87,54 @@ public class UserRepository {
 
     }
 
+    public void changeName(String name, String token, Updateprofile callback) {
+        ChangeNameRequest changeNameRequest = new ChangeNameRequest(name);
+
+        apiService = ApiClient.getAuthClient(token).create(ApiService.class);
+        Call<UserModel> call = apiService.changeName(changeNameRequest);
+
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                } else {
+                    // API call failed, handle error
+                    // Log error message or show error to user
+                }
+            }
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                // API call failed due to network error or other issues
+                // Log error message or show error to user
+            }
+        });
+    }
+
+    public void changeEmail(String email, String token, Updateprofile callback) {
+        ChangeEmailRequest changeEmailRequest = new ChangeEmailRequest(email);
+
+        apiService = ApiClient.getAuthClient(token).create(ApiService.class);
+        Call<UserModel> call = apiService.changeEmail(changeEmailRequest);
+
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                } else {
+                    // API call failed, handle error
+                    // Log error message or show error to user
+                }
+            }
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                // API call failed due to network error or other issues
+                // Log error message or show error to user
+            }
+        });
+    }
+
     public interface LoginCallback {
         void onSuccess(UserModel user);
         void onError(String error);
@@ -97,5 +147,8 @@ public class UserRepository {
 
     public interface LogoutCallback {
         void onSuccess();
+    }
+    public interface Updateprofile {
+        void onSuccess(UserModel user);
     }
 }

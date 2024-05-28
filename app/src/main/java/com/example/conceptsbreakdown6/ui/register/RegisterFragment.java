@@ -29,11 +29,8 @@ public class RegisterFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        // Initialize UserRepository
-        UserRepository userRepository = new UserRepository();
-
-        // Initialize SessionManager with UserRepository
-        SessionManager sessionManager = new SessionManager(requireContext(), userRepository);
+        // Get instance of sessionManager
+        SessionManager sessionManager = SessionManager.getInstance(requireContext());
 
         // Create ViewModelFactory
         RegisterViewModelFactory factory = new RegisterViewModelFactory(sessionManager);

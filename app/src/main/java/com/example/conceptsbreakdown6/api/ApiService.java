@@ -1,8 +1,10 @@
 package com.example.conceptsbreakdown6.api;
 
+import com.example.conceptsbreakdown6.api.model.ActivityModel;
+import com.example.conceptsbreakdown6.api.model.ChangeEmailRequest;
 import com.example.conceptsbreakdown6.api.model.ChangeNameRequest;
 import com.example.conceptsbreakdown6.api.model.LoginRequest;
-import com.example.conceptsbreakdown6.api.model.NewsResponse;
+import com.example.conceptsbreakdown6.api.model.StoryModel;
 import com.example.conceptsbreakdown6.api.model.RegisterRequest;
 import com.example.conceptsbreakdown6.api.model.RegisterResponse;
 import com.example.conceptsbreakdown6.api.model.UserModel;
@@ -25,12 +27,19 @@ public interface ApiService {
     @POST("change-name")
     Call<UserModel> changeName(@Body ChangeNameRequest changeNameRequest);
 
+    @POST("change-email")
+    Call<UserModel> changeEmail(@Body ChangeEmailRequest changeEmailRequest);
+
     @GET("logout")
     Call<Void> logout();
 
     @GET("getStories")
-    Call<List<NewsResponse>> fetchNews();
+    Call<List<StoryModel>> fetchNews();
+
+    @GET("getActivities")
+    Call<List<ActivityModel>> fetchActivities();
+
 
     @GET("stories/{id}")
-    Call<NewsResponse> fetchNews(@Path("id") int id);
+    Call<StoryModel> fetchNews(@Path("id") int id);
 }
