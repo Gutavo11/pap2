@@ -41,7 +41,7 @@ public class StoryFragment extends Fragment {
         //initialize the adapter
         StoryViewModelAdapter storyViewModelAdapter = new StoryViewModelAdapter(new ArrayList<>());
 
-        //display data
+        //setup recycler view with adapter
         RecyclerView recyclerView = binding.recyclerViewStories;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(storyViewModelAdapter);

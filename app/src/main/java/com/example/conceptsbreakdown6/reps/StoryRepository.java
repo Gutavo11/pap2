@@ -20,10 +20,6 @@ import java.util.List;
 public class StoryRepository {
     private MutableLiveData<List<StoryModel>> stories = new MutableLiveData<>();
 
-    public StoryRepository() {
-
-    }
-
     public void fetchStories() {
         new FetchNewsTask().execute("https://aeg1.pt");
     }
