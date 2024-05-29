@@ -64,5 +64,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             binding.setActivity(activityModel);
             binding.executePendingBindings();
         }
+
+
     }
 }

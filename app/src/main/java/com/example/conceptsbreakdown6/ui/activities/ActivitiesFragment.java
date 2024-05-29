@@ -10,9 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.conceptsbreakdown6.R;
 import com.example.conceptsbreakdown6.api.model.ActivityModel;
 import com.example.conceptsbreakdown6.databinding.FragmentActivitiesBinding;
 
@@ -54,6 +56,12 @@ public class ActivitiesFragment extends Fragment {
                 }
             }
         });
+
+        //set fab click listener
+        binding.fab.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_nav_activities_to_createActivityFragment);
+        });
+
     }
 
     @Override

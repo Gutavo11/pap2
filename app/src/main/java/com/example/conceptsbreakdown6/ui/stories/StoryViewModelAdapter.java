@@ -1,6 +1,7 @@
 package com.example.conceptsbreakdown6.ui.stories;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -42,12 +43,12 @@ public class StoryViewModelAdapter extends RecyclerView.Adapter<StoryViewModelAd
         Picasso.get().load("https://aeg1.pt/"+storyModel.getImage_path()).into(holder.binding.storyImage);
 
         //set click listener for each story item
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 StoryModel newsResponse = stories.get(holder.getAdapterPosition());
             }
-        });*/
+        });
     }
 
     @Override
@@ -66,8 +67,18 @@ public class StoryViewModelAdapter extends RecyclerView.Adapter<StoryViewModelAd
         }
 
         public void bind(StoryModel storyModel) {
+            String truncatedContent = truncateContent(storyModel.getContent(), 180);
+            storyModel.setContent(truncatedContent);
             binding.setStory(storyModel);
             binding.executePendingBindings();
+        }
+
+        private String truncateContent(String content, int maxLength) {
+            if (content.length() > maxLength) {
+                return content.substring(0, maxLength) + "...";
+            } else {
+                return content;
+            }
         }
     }
 }

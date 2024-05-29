@@ -29,6 +29,7 @@ public class SessionManager {
         userRepository = new UserRepository();
         sharedPreferences = context.getSharedPreferences("session_data", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        isLoggedIn();
     }
 
     public static synchronized SessionManager getInstance(Context context) {
@@ -36,6 +37,12 @@ public class SessionManager {
             sessionManager = new SessionManager(context);
         }
         return sessionManager;
+    }
+
+    public void isLoggedIn() {
+        if(sharedPreferences.getBoolean("is_logged_in", false)) {
+            navigateToMainActivity();
+        }
     }
 
     public void login(String email, String password) {
@@ -117,6 +124,12 @@ public class SessionManager {
 
     private void navigateToAuthActivity() {
         Intent intent = new Intent(context, AuthActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
+    private void navigateToMainActivity() {
+        Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
